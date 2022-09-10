@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2022. Josh Bedwell. All rights reserved.
+ */
+
 #![forbid(unsafe_code)]
 #![deny(clippy::pedantic)]
 #![deny(clippy::unwrap_used)]
@@ -23,6 +27,7 @@ use jsonwebtoken::{
 };
 use serde::de::DeserializeOwned;
 use std::collections::HashMap;
+use aws_snipsnap_lib::database::nonces_table::NoncesTable;
 
 //TODO: put verification into a struct and only fetch apple keys once in the beginning
 async fn fetch_apple_keys() -> Result<HashMap<String, KeyComponents>>
@@ -85,6 +90,10 @@ pub async fn validate(
 	token: String,
 	ignore_expire: bool,
 ) -> Result<TokenData<Claims>> {
+
+	// TODO add nonce validation here
+	let nonces_table = NoncesTable::new();
+
 	let token_data =
 		decode_token::<Claims>(token, ignore_expire).await?;
 
