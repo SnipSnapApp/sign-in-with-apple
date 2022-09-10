@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2022. Josh Bedwell. All rights reserved.
+ */
+
 use serde::{Deserialize, Deserializer, Serialize};
 
 pub const APPLE_PUB_KEYS: &str =
@@ -25,6 +29,7 @@ pub struct Claims {
 	pub email: Option<String>,
 	pub email_verified: Option<String>,
 	pub auth_time: i32,
+	pub nonce: String,
 }
 
 /// see <https://developer.apple.com/documentation/sign_in_with_apple/processing_changes_for_sign_in_with_apple_accounts>

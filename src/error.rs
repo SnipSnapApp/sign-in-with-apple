@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2022. Josh Bedwell. All rights reserved.
+ */
+
 //! Convenience types for lib specific error handling
 
 use thiserror::Error;
@@ -16,6 +20,8 @@ pub enum Error {
 	IssClaimMismatch,
 	#[error("Client ID mismatch")]
 	ClientIdMismatch,
+	#[error("Nonnce mismatch")]
+	NonceMistmatch,
 	#[error(transparent)]
 	Jwt(#[from] jsonwebtoken::errors::Error),
 	#[error("serde_json error: {0}")]

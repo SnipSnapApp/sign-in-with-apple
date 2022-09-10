@@ -88,14 +88,14 @@ pub async fn decode_token<T: DeserializeOwned>(
 pub async fn validate(
 	client_id: String,
 	token: String,
+	device_id: String,
 	ignore_expire: bool,
 ) -> Result<TokenData<Claims>> {
 
 	// TODO add nonce validation here
 	let nonces_table = NoncesTable { };
 
-	let token_data =
-		decode_token::<Claims>(token, ignore_expire).await?;
+	let token_data = decode_token::<Claims>(token, ignore_expire).await?;
 
 	//TODO: can this be validated alread in `decode_token`?
 	if token_data.claims.iss != APPLE_ISSUER {
@@ -105,6 +105,18 @@ pub async fn validate(
 	if token_data.claims.sub != client_id {
 		return Err(Error::ClientIdMismatch);
 	}
+
+	match NoncesTable::get_nonce(&*device_id).await {
+		Ok(str) => {
+			if str != token_data.claims.aud {
+				return Err(Error::NonceMistmatch)
+			}
+		},
+		Err(e) => {
+			// TODO match e and return an appropriate error
+		}
+	}
+
 	Ok(token_data)
 }
 
