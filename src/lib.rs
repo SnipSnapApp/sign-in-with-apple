@@ -92,7 +92,7 @@ pub async fn validate(
 ) -> Result<TokenData<Claims>> {
 
 	// TODO add nonce validation here
-	let nonces_table = NoncesTable::new();
+	let nonces_table = NoncesTable { };
 
 	let token_data =
 		decode_token::<Claims>(token, ignore_expire).await?;
